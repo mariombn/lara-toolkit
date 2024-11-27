@@ -1,0 +1,21 @@
+{
+    "name": "marioneto/lara-toolkit",
+    "description": "Um Pacote de recursos para apoiar aplicações Laravel",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Marioneto\\LaraToolkit\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mario de Moraes",
+            "email": "mariombn@gmail.com"
+        }
+    ],
+        "require": {
+        "php": ">=8.0",
+        "illuminate/support": "^8.0|^9.0|^10.0"
+    }
+}
