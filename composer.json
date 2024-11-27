@@ -17,6 +17,14 @@
     "require": {
         "php": ">=8.0",
         "illuminate/support": "^8.0|^9.0|^10.0",
-        "illuminate/http": "^8.0|^9.0|^10.0"
+        "illuminate/http": "^8.0|^9.0|^10.0",
+        "illuminate/console": "^8.0|^9.0|^10.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LaraToolkit\\Providers\\LaraToolkitServiceProvider"
+            ]
+        }
     }
 }
