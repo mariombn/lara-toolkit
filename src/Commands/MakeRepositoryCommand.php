@@ -6,14 +6,14 @@ use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Attribute\AsCommand;
 
-#[AsCommand(name: 'make:service')]
-class MakeServiceCommand extends GeneratorCommand
+#[AsCommand(name: 'make:repository')]
+class MakeRepositoryCommand extends GeneratorCommand
 {
-    protected $signature = 'make:service {name} {domain}';
+    protected $signature = 'make:repository {name}';
 
-    protected $description = 'Create a new Service class';
+    protected $description = 'Create a new Repository class';
 
-    protected $type = 'Service';
+    protected $type = 'Repository';
 
     public function handle()
     {
@@ -22,27 +22,28 @@ class MakeServiceCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        return __DIR__ . '/stubs/service.stub';
+        return __DIR__ . '/stubs/repository.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)
     {
-        $domain = ucfirst($this->argument('domain'));
-
-        return $rootNamespace . '\\Services\\' . $domain;
+        return $rootNamespace . '\\Repositories';
     }
 
     protected function getPath($name)
     {
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+        $name = str_replace('\\', '/', $name);
 
-        return $this->laravel['path'] . '/' . str_replace('\\', '/', $name) . 'Service.php';
+        return $this->laravel['path'] . '/' . $name . 'Repository.php';
     }
 
     protected function buildClass($name)
     {
         $stub = $this->files->get($this->getStub());
         $stub = $this->replaceNamespace($stub, $name)->replaceClass($stub, $name);
+        $modelName = $this->argument('name');
+        $stub = str_replace('{{ name }}', $modelName, $stub);
 
         return $stub;
     }

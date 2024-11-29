@@ -17,6 +17,7 @@ class LaraToolkitServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \LaraToolkit\Commands\MakeServiceCommand::class,
+                \LaraToolkit\Commands\MakeRepositoryCommand::class,
             ]);
         }
     }

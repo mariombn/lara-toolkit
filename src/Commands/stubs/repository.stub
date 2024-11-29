@@ -1,0 +1,11 @@
+<?php
+
+namespace {{ namespace }};
+
+use LaraToolkit\Abstractions\AbstractRepository;
+use App\Models\{{ name }};
+
+class {{ class }}Repository extends AbstractRepository
+{
+    protected string $modelClass = {{ name }}::class;
+}
