@@ -170,32 +170,15 @@ A classe `AbstractRepository` é uma abstração que fornece métodos comuns par
    }
    ```
 
-### Criando Exceções Personalizadas
+### Usnado Exceções De Negócio
 
-1. Crie uma exceção personalizada para erros de negócio:
-
-   ```php
-   <?php
-
-   namespace App\Exceptions;
-
-   use Exception;
-
-   class BusinessException extends Exception
-   {
-       //
-   }
-   ```
-
-2. Lance a exceção quando necessário:
-
-   ```php
-   if ($data['age'] < 18) {
-       throw new BusinessException('O usuário deve ter pelo menos 18 anos.');
-   }
-   ```
-
-3. No método `returnError`, a mensagem da `BusinessException` será usada automaticamente.
+Caso você precise gerar uma excessão onde deseja que a mensagem seja retornada no JSON de erro, você pode usar a excessão `BusinessException`.
+```php
+if ($data['age'] < 18) {
+   throw new BusinessException('O usuário deve ter pelo menos 18 anos.');
+}
+```
+Se você estiver usando a trait `ApiControllerTrait`, você pode usar o método `returnError` para retornar a mensagem da `BusinessException` no JSON de erro, suprimindo a mensagem padrão.
 
 ## Contribuição
 
