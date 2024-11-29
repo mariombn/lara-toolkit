@@ -3,40 +3,69 @@
 namespace LaraToolkit\Traits;
 
 use Illuminate\Http\JsonResponse;
+use Throwable;
 
 trait ApiControllerTrait
 {
-    protected function returnSuccess(mixed $data = [], string $customMessage = null, int $statusCode = 200): JsonResponse
+    /**
+     * Retorna uma resposta de sucesso.
+     *
+     * @param mixed       $data
+     * @param string|null $message
+     * @param int         $statusCode
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function returnSuccess($data, string $message = null, int $statusCode = 200): JsonResponse
     {
         $response = [
             'success' => true,
-            'data' => $data,
+            'message' => $message ?? 'Operação realizada com sucesso.',
+            'data'    => $data,
         ];
-
-        if (!is_null($customMessage)) {
-            $response['message'] = $customMessage;
-        }
 
         return new JsonResponse($response, $statusCode);
     }
 
-    protected function returnException(string $customMessage, \Throwable $exception, int $statusCode = 400): JsonResponse
+    /**
+     * Retorna uma resposta de erro.
+     *
+     * @param string          $message
+     * @param \Throwable|null $exception
+     * @param int             $statusCode
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function returnError(string $message, Throwable $exception = null, int $statusCode = 500): JsonResponse
     {
-        $errorData = [
-            'message' => $exception->getMessage(),
-            'code' => $exception->getCode(),
-            'file' => $exception->getFile(),
-            'line' => $exception->getLine(),
-            'trace' => $exception->getTrace(),
-        ];
-
-        //TODO: Imeplment env verification for show error details
-
         $response = [
-            'success' => true,
-            'message' => $customMessage,
-            'error' => $errorData,
+            'success' => false,
         ];
+
+        $response['message'] = $message;
+
+        if ($exception instanceof \LaraToolkit\Exceptions\BusinessException) {
+            $response['message'] = $exception->getMessage();
+        }
+
+        if ($exception) {
+            $logger = \Illuminate\Container\Container::getInstance()->make(\Psr\Log\LoggerInterface::class);
+            $logger->error($exception->getMessage(), [
+                'exception' => $exception,
+            ]);
+        }
+
+        $environment = \Illuminate\Container\Container::getInstance()->environment();
+
+        if ($exception && $environment !== 'production') {
+            $response['data'] = [
+                'exception' => get_class($exception),
+                'message'   => $exception->getMessage(),
+                'file'      => $exception->getFile(),
+                'line'      => $exception->getLine(),
+                'trace'     => $exception->getTrace(),
+            ];
+        }
 
         return new JsonResponse($response, $statusCode);
     }
