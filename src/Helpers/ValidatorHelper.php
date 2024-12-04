@@ -93,7 +93,7 @@ class ValidatorHelper
     }
 
 
-    public static function celphone(string $celular): bool
+    public static function cellphone(string $celular): bool
     {
         $celular = preg_replace('/\D/', '', $celular);
 

@@ -26,8 +26,8 @@ class LaraToolkitServiceProvider extends ServiceProvider
             return ValidatorHelper::phone($value);
         });
 
-        Validator::extend('celphone', function ($attribute, $value, $parameters, $validator) {
-            return ValidatorHelper::celphone($value);
+        Validator::extend('cellphone', function ($attribute, $value, $parameters, $validator) {
+            return ValidatorHelper::cellphone($value);
         });
 
         Validator::extend('cep', function ($attribute, $value, $parameters, $validator) {
