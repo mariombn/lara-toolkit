@@ -48,6 +48,11 @@ trait ApiControllerTrait
             $response['message'] = $exception->getMessage();
         }
 
+        if ($exception instanceof \Illuminate\Auth\Access\AuthorizationException) {
+            $response['message'] = "Você não tem permissão para realizar esta ação.";
+            $statusCode = 403;
+        }
+
         if ($exception) {
             $logger = \Illuminate\Container\Container::getInstance()->make(\Psr\Log\LoggerInterface::class);
             $logger->error($exception->getMessage(), [
